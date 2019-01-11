@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
 
-class Variant extends React.Component {
+type VariantProps = {
+  name: string | number;
+  children: any;
+};
+
+class Variant extends React.Component<VariantProps> {
   render() {
-    return (
-      this.props.children
-    )
+    return this.props.children;
   }
 }
 
-export default Variant
+export default Variant;

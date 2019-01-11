@@ -1,59 +1,61 @@
-import React, { Component } from "react";
-import Emitter from './events'
+import React, { Component } from 'react';
+import Emitter from './events';
 
 type ExperimentProps = {
-  children: any
-  name: React.ReactText
-  winner?: (experimentName: string | number, selectedVariant: string) => any
-}
+  children: any;
+  name: React.ReactText;
+  winner?: (experimentName: string | number, selectedVariant: string) => any;
+};
 
 type ExperimentState = {
-  selectedVariant: string
-}
+  selectedVariant: string;
+};
 
 class Experiment extends Component<ExperimentProps, ExperimentState> {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      selectedVariant: this.getLocalStorageVariant() || this.chooseVariant(this.props.children, this.props.name)
-    }
+      selectedVariant:
+        this.getLocalStorageVariant() ||
+        this.chooseVariant(this.props.children, this.props.name),
+    };
   }
 
   checkIfIsVariant(variantObj: any) {
     if (variantObj.type.name === 'Variant') {
-      return true
+      return true;
     }
-  
-    return false
+
+    return false;
   }
-  
+
   chooseVariant(children, experimentName) {
-    const variants = children.map(variantObj => {
-      if (!this.checkIfIsVariant(variantObj)) {
-        throw new Error("Wrap the Experiment children in a Variant tag")
-      }
-  
-      return (
-        variantObj.props.name
-      )
-    }).sort();
-  
+    const variants = children
+      .map(variantObj => {
+        if (!this.checkIfIsVariant(variantObj)) {
+          throw new Error('Wrap the Experiment children in a Variant tag');
+        }
+
+        return variantObj.props.name;
+      })
+      .sort();
+
     const weights = children.reduce((weights, variant) => {
-      let variantWeight = variant.props.weight || 1
-  
+      let variantWeight = variant.props.weight || 1;
+
       weights.push(variantWeight);
-  
+
       return weights;
     }, []);
-  
-    const weightSum = weights.reduce((a, b) => {
+
+    const weightSum = weights.reduce((a: number, b: number) => {
       return a + b;
     }, 0);
-  
+
     let weightedIndex = Math.floor(Math.random() * weightSum);
-  
+
     let selectedVariant = variants[variants.length - 1];
-  
+
     for (let index = 0; index < weights.length; index++) {
       weightedIndex -= weights[index];
       if (weightedIndex < 0) {
@@ -63,30 +65,28 @@ class Experiment extends Component<ExperimentProps, ExperimentState> {
     }
 
     if (this.props.winner instanceof Function) {
-      this.props.winner(experimentName, selectedVariant)
+      this.props.winner(experimentName, selectedVariant);
     }
-  
-    Emitter.chooseNewVariant(experimentName, selectedVariant)
-    window.sessionStorage.setItem(experimentName, selectedVariant)
+
+    Emitter.chooseNewVariant(experimentName, selectedVariant);
+    window.sessionStorage.setItem(experimentName, selectedVariant);
     return selectedVariant;
   }
 
   getLocalStorageVariant() {
-    const experimentName: any = this.props.name
-    const getVariant = window.sessionStorage.getItem(experimentName)
+    const experimentName: any = this.props.name;
+    const getVariant = window.sessionStorage.getItem(experimentName);
 
     if (getVariant) {
-      Emitter.getExistingVariant(getVariant)
+      Emitter.getExistingVariant(getVariant);
 
       if (this.props.winner instanceof Function) {
-        this.props.winner(experimentName, getVariant)
+        this.props.winner(experimentName, getVariant);
       }
-      
     }
 
-    return getVariant
+    return getVariant;
   }
-
 
   render() {
     const getVariant = this.props.children.filter(variantObj => {

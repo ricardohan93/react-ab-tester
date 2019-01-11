@@ -2,19 +2,42 @@
   "name": "react-abtester",
   "version": "1.0.0",
   "description": "A simple and lightweight tool to create A/B testing in React projects",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "test": "jest --config jestconfig.json",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
+    "lint": "tslint -p tsconfig.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:ricardohan93/react-ab-tester.git"
+  },
+  "keywords": [
+    "ab-test",
+    "split-test",
+    "react"
+  ],
+  "files": [
+    "lib/**/*"
+  ],
   "author": "Ricardo Han",
   "license": "ISC",
+  "homepage": "https://github.com/ricardohan93/react-ab-tester",
   "devDependencies": {
+    "@types/jest": "^23.3.12",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
+    "@types/react-test-renderer": "^16.0.3",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.3",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-test-renderer": "^16.7.0",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.17.0",
     "typescript": "^3.2.2"
   }
 }
