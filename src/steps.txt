@@ -1,0 +1,12 @@
+- Experiment needs an id (can be string or number)
+
+- In Experiment:
+
+    - Assign userID to user 
+
+    - Expose choosed Variant
+    - Expose Experiment name
+    - Expose weight of Variant
+    - Expose userID
+
+
